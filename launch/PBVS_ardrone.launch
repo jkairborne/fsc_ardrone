@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<launch>
+
+  <arg name="roomba" default="false"/>
+<group if="$(arg roomba)">
+  <node name="Roomba_node" pkg="visual_servoing_ardrone" type="roomba_vel" />
+  <include file="$(find turtlebot_bringup)/launch/minimal.launch"/> 
+</group>
+
+  <include file="$(find opencv_ardrone)/launch/ardrone.launch"/>
+<!-- Launch the OptiTrack node - the OptiTrack must already be running -->
+  <include file="$(find vrpn_client_ros)/launch/sample.launch"/>
+
+<!-- Launch the ardronev1 node - our OptiTrack control-->
+  <node name="position_controller" pkg="mod_key_controller" type="position_controller.py" output = "screen" required="true"/>
+
+  <node name="desired_values" pkg="mod_key_controller" type="desired_positions.py" required="true"/>
+
+  <node name="drone_controller" pkg="mod_key_controller" type="drone_controller.py" output = "screen"/>
+
+  <node name="key_controller" pkg="mod_key_controller" type="keyboard_controller.py" required="true" output = "screen"/>
+
+  <arg name="PBVS" default="true"/>
+<group if="$(arg PBVS)">
+  <node name="PBVS_Control" pkg="ardronecontrol" type="PBVS_ardrone" output = "screen" required="true"/>
+</group>
+
+
+  <arg name="IBVS" default="false"/>
+<group if="$(arg IBVS)">
+  <node name="IBVS_Control" pkg="opencv_ardrone" type="chessboard" output="screen" required="true"/>
+</group>
+
+
+  <node name="reconfigure_gui" pkg="rqt_reconfigure" type="rqt_reconfigure"/>
+
+ <!-- <node name="Plot_node"
+        pkg="rqt_plot"
+        type="rqt_plot"
+        args="/cmd_vel/linear /vrpn_client_node/ardrone/pose/pose/position" /> -->
+
+</launch>

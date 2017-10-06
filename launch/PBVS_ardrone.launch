@@ -9,28 +9,28 @@
   <include file="$(find turtlebot_bringup)/launch/minimal.launch"/> 
 </group>
 
-  <include file="$(find opencv_ardrone)/launch/ardrone.launch"/>
+  <include file="$(find fsc_ardrone)/launch/ardrone.launch"/>
 <!-- Launch the OptiTrack node - the OptiTrack must already be running -->
   <include file="$(find vrpn_client_ros)/launch/sample.launch"/>
 
 <!-- Launch the ardronev1 node - our OptiTrack control-->
-  <node name="position_controller" pkg="mod_key_controller" type="position_controller.py" output = "screen" required="true"/>
+  <node name="position_controller" pkg="fsc_ardrone" type="position_controller.py" output = "screen"/>
 
-  <node name="desired_values" pkg="mod_key_controller" type="desired_positions.py" required="true"/>
+  <node name="desired_values" pkg="fsc_ardrone" type="desired_positions.py"/>
 
-  <node name="drone_controller" pkg="mod_key_controller" type="drone_controller.py" output = "screen"/>
+  <node name="drone_controller" pkg="fsc_ardrone" type="drone_controller.py" output = "screen"/>
 
-  <node name="key_controller" pkg="mod_key_controller" type="keyboard_controller.py" required="true" output = "screen"/>
+  <node name="key_controller" pkg="fsc_ardrone" type="keyboard_controller.py" required="true" output = "screen"/>
 
   <arg name="PBVS" default="true"/>
 <group if="$(arg PBVS)">
-  <node name="PBVS_Control" pkg="ardronecontrol" type="PBVS_ardrone" output = "screen" required="true"/>
+  <node name="PBVS_Control" pkg="fsc_ardrone" type="PBVS_ardrone2" output = "screen" required="true"/>
 </group>
 
 
   <arg name="IBVS" default="false"/>
 <group if="$(arg IBVS)">
-  <node name="IBVS_Control" pkg="opencv_ardrone" type="chessboard" output="screen" required="true"/>
+  <node name="IBVS_Control" pkg="fsc_ardrone" type="chessboard2" output="screen" required="true"/>
 </group>
 
 

@@ -18,6 +18,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   sensor_msgs
   turtlebot_bringup
+  vrpn_client_ros
+  dynamic_reconfigure
 )
 
 ## System dependencies are found with CMake's conventions
@@ -57,6 +59,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    FILES
    ImgData.msg
+   pbvs.msg
 #   Message2.msg
  )
 
@@ -101,6 +104,11 @@ find_package(catkin REQUIRED COMPONENTS
 #   cfg/DynReconf2.cfg
 # )
 
+generate_dynamic_reconfigure_options(
+    config/PIDset.cfg
+)
+
+
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -113,7 +121,9 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES mod_key_controller
-  CATKIN_DEPENDS ardrone_autonomy rospy cv_bridge geometry_msgs image_transport opencv3 roscpp sensor_msgs std_msgs message_runtime
+  CATKIN_DEPENDS ardrone_autonomy rospy cv_bridge geometry_msgs 
+				 image_transport opencv3 roscpp sensor_msgs std_msgs 
+				 message_runtime
 #  DEPENDS system_lib
 )
 
@@ -132,6 +142,7 @@ include_directories(
 set(HEADER_SOURCES
     src/ibvs.cpp
     src/navdata_cb_ardrone.cpp
+	src/pid.cpp
 )
 
 ## Declare a C++ library
@@ -148,7 +159,7 @@ set(HEADER_SOURCES
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(chessboard2 src/chessboard.cpp ${HEADER_SOURCES})
-
+add_executable(PBVS_ardrone2 src/PBVS_ardrone.cpp ${HEADER_SOURCES})
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -161,7 +172,7 @@ add_executable(chessboard2 src/chessboard.cpp ${HEADER_SOURCES})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(chessboard2 ${catkin_LIBRARIES})
-
+target_link_libraries(PBVS_ardrone2 ${catkin_LIBRARIES})
 #############
 ## Install ##
 #############

@@ -72,7 +72,7 @@ public:
         cmdNotFromIBVS.data = 1;
         count=0;
 
-        scalingLat = 4000;
+        scalingLat = 8000;
         scalingVert = 2;
         scalingPsi = 2;
 
